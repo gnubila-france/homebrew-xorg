@@ -8,6 +8,7 @@ class Libdrm < Formula
   option "with-static",   "Build static libraries (not recommended)"
   option "with-valgrind", "Build libdrm with valgrind support"
 
+  depends_on "libpthread-stubs"
   depends_on "pkg-config" => :build
   depends_on "util-macros" => :build
   depends_on "autoconf" => :build
@@ -26,9 +27,6 @@ class Libdrm < Formula
 
     # Be explicit about the configure flags
     args << "--enable-static=#{build.with?("static") ? "yes" : "no"}"
-
-    ## Get rid of dependency on libpthread-stubs
-    inreplace "configure.ac", /PKG_CHECK_MODULES\(PTHREADSTUBS\, pthread-stubs\)/, ""
 
     ENV["ACLOCAL"] = "aclocal -I #{HOMEBREW_PREFIX}/share/aclocal"
     system "autoreconf", "-fiv"
